@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import restful.api.todo.repository.TaskRepository;
 import restful.api.todo.dto.TaskDto;
+import restful.api.todo.dto.UserDto;
 import restful.api.todo.exception.PermissionDeniedException;
 import restful.api.todo.mapper.TaskMapper;
+import restful.api.todo.mapper.UserMapper;
 import restful.api.todo.model.Task;
 import restful.api.todo.model.User;
 
@@ -19,17 +21,21 @@ public class TaskService {
     private final TaskRepository repository;
     private PermissionService permissionService;
     private final TaskMapper taskMapper;
+    private final UserMapper userMapper;
 
     @Autowired
-    public TaskService(TaskRepository repository, PermissionService permissionService, TaskMapper taskMapper) {
+    public TaskService(TaskRepository repository, PermissionService permissionService, TaskMapper taskMapper, UserMapper userMapper) {
         this.repository = repository;
         this.permissionService = permissionService;
         this.taskMapper = taskMapper;
+        this.userMapper = userMapper;
 
     }
 
-    public List<TaskDto> viewTasks(User user) {
+    public List<TaskDto> viewTasks(UserDto userdDto) {
         try {
+            User user = userMapper.convertToEntity(userdDto);
+
             permissionService.validateViewTasks(user);
             Iterable<Task> tasksIterable; // spring returns iterable for collections of task
 
@@ -57,8 +63,9 @@ public class TaskService {
         }
     }
 
-    public TaskDto viewTask(User user, Long taskId) {
+    public TaskDto viewTask(UserDto userdDto, Long taskId) {
         try {
+            User user = userMapper.convertToEntity(userdDto);
             permissionService.validateViewTask(user, taskId);
             var optionalTask = repository.findById(taskId);
 
@@ -72,18 +79,25 @@ public class TaskService {
         }
     }
 
-    public Task addTask(User user, Task task) {
+    public TaskDto addTask(UserDto userdDto, TaskDto taskDto) {
+
         try {
+            Task task = taskMapper.convertToEntity(taskDto);
+            User user = userMapper.convertToEntity(userdDto);
             permissionService.validateCreateTask(user);
-            return repository.save(task);
+            var addedTask =  repository.save(task);
+            return taskMapper.convertToDto(addedTask);
 
         } catch (PermissionDeniedException e) {
             throw new PermissionDeniedException("You do not have permission to create this task. " + e.getMessage());
         }
     }
 
-    public TaskDto updateTask(User user, Task task) {
+    public TaskDto updateTask(UserDto userdDto, TaskDto taskDto) {
+
         try {
+            Task task = taskMapper.convertToEntity(taskDto);
+            User user = userMapper.convertToEntity(userdDto);
             permissionService.validateUpdateTask(user, task);
 
             var updatedTask =  repository.findById(task.getId())
@@ -103,9 +117,11 @@ public class TaskService {
         }
     }
 
-    public void deleteTask(User user, Task task) {
-        try {
+    public void deleteTask(UserDto userdDto, TaskDto taskDto) {
 
+        try {
+            Task task = taskMapper.convertToEntity(taskDto);
+            User user = userMapper.convertToEntity(userdDto);
             permissionService.validateCreateTask(user);
             repository.delete(task);
 
