@@ -19,12 +19,9 @@ public class User {
 
     @Getter @Id
     @NotBlank private String matricule;
-    @Getter
     @NotBlank private String firstName;
-    @Getter
     @NotBlank private String lastName;
-    private String email;
-
+    @NotBlank private String email;
 
     @ManyToOne
     @JoinColumn(name = "company_id") // Foreign key: multiple users can be assigned to one company

@@ -2,6 +2,7 @@ package restful.api.todo.mapper;
 
 import org.springframework.stereotype.Component;
 
+import restful.api.todo.model.Company;
 import restful.api.todo.model.User;
 import restful.api.todo.dto.CompanyDto;
 import restful.api.todo.dto.UserDto;
@@ -16,18 +17,17 @@ public class UserMapper {
         var companydto = new CompanyDto(company.getId(), company.getName(), company.getAddress());
         return new UserDto( user.getMatricule(), user.getFirstName(), 
         user.getLastName(),companydto , user.getCategory());
-
-    
+ 
     }
 
     public User convertToEntity(UserDto dto) {
+        
         if (dto == null) return null;
-        User user = new User();
-        user.setMatricule(dto.getMatricule());
-        user.setMatricule(dto.getMatricule());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        return user;
+        var companydto = dto.getCompany();
+        var company = new Company(companydto.getId(), companydto.getName(), companydto.getAddress());
+        return new User(dto.getMatricule(), dto.getFirstName(), dto.getLastName()
+        , dto.getEmail(), company, dto.getCategory());
+    
     }
 }
 
