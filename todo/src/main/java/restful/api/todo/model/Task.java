@@ -2,6 +2,8 @@ package restful.api.todo.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,10 +28,12 @@ public class Task {
     @NotBlank private String title;
     @NotBlank private String description;
     @NotBlank private LocalDate dueDate;
+    
+    @Enumerated(EnumType.STRING) 
     private TaskStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "user") // Foreign key: multiple tasks can be assigned to one user
+    @JoinColumn(name = "assignee_id") // Foreign key: multiple tasks can be assigned to one user
     @NotNull
     private User assignee;
 

@@ -1,6 +1,7 @@
 package restful.api.todo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import restful.api.todo.exception.PermissionDeniedException;
 import restful.api.todo.model.Task;
@@ -16,6 +17,7 @@ import restful.api.todo.repository.UserRepository;
     Company-Admin users:  Can manage their own tasks and also view/manage tasks of users within their company.
     Super Users:  Can view and manage all tasks across all companies
  */
+@Service
 public class PermissionService {
 
     private final UserRepository userRepository;
