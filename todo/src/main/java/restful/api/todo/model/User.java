@@ -28,11 +28,7 @@ public class User {
     @JoinColumn(name = "company_id") // Foreign key: multiple users can be assigned to one company
     @NotNull  private Company company; //validate as Non null by JPA
 
-    public enum UserCategory {
-        STANDARD,
-        COMPANY_ADMIN,
-        SUPER_USER
-    }
+
     @Enumerated(EnumType.STRING) // store as a string
     private UserCategory category = UserCategory.STANDARD;
 
