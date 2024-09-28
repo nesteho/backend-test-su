@@ -22,13 +22,10 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
-    private String title;
-    @NotBlank
-    private String description;
-    @NotBlank
-    private LocalDate dueDate;
 
+    @NotBlank private String title;
+    @NotBlank private String description;
+    @NotBlank private LocalDate dueDate;
     private TaskStatus status;
 
     @ManyToOne
@@ -40,7 +37,7 @@ public class Task {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.status = status;
+        this.status = status != null ? status : TaskStatus.IN_PROGRESS;
         this.assignee = assignee;
     } 
 }
