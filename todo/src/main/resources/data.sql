@@ -7,10 +7,10 @@ INSERT INTO company (id, name, address) VALUES
 -- Insert Users
 INSERT INTO user_profile (matricule, first_name, last_name, email, company_id, category) VALUES
 ('001', 'Alice', 'Johnson', 'alice.johnson@example.com', 1, 'STANDARD'),
-('002', 'Bob', 'Smith', 'bob.smith@example.com', 1, 'COMPANY_ADMIN'),
-('003', 'Charlie', 'Brown', 'charlie.brown@example.com', 2, 'SUPER_USER'),
+('002', 'Bob', 'Smith', 'bob.smith@example.com', 2, 'COMPANY_ADMIN'),
+('003', 'Charlie', 'Brown', 'charlie.brown@example.com', 3, 'SUPER_USER'),
 ('004', 'Diana', 'Prince', 'diana.prince@example.com', 2, 'STANDARD'),
-('005', 'Ethan', 'Hunt', 'ethan.hunt@example.com', 3, 'COMPANY_ADMIN');
+('005', 'Ethan', 'Hunt', 'ethan.hunt@example.com', 1, 'COMPANY_ADMIN');
 
 -- Insert Tasks
 INSERT INTO task (title, description, due_date, status, assignee_id) VALUES 
