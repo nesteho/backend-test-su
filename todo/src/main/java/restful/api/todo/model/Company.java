@@ -23,7 +23,7 @@ public class Company {
     @NotBlank
     private String address;
 
-    public Company(String name, String address) { //without id
+    public Company(String name, String address) {
         this.name = name;
         this.address = address;
     }

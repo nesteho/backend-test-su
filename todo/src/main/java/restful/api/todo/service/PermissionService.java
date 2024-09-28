@@ -2,7 +2,7 @@ package restful.api.todo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import restful.api.todo.exception.*;
+import restful.api.todo.exception.PermissionDeniedException;
 import restful.api.todo.model.Task;
 import restful.api.todo.model.TaskStatus;
 import restful.api.todo.model.User;
@@ -30,12 +30,22 @@ public class PermissionService {
     public void validateCreateTask(User user){
         checkUser(user);  // every registered user can create a task
     }
-
-    public void validateViewTask(User user, Task task){
-        validateTaskOwnership(user, task, "view");
-
+    public void validateViewTasks(User user){
+        checkUser(user);  
     }
-     public void validateUpdateTask(User user, Task task){
+    
+    
+    public Task validateViewTask(User user, Long taskId) { // wants single task
+        checkUser(user); 
+
+        Task task = taskRepository.findById(taskId)
+            .orElseThrow(() -> new PermissionDeniedException("Task not found with ID: " + taskId)); // Check if the task with given ID exists
+
+        validateTaskOwnership(user, task, "view");
+        return task;
+    }
+
+    public void validateUpdateTask(User user, Task task){
         validateTaskOwnership(user, task, "update");
 
     }
@@ -44,7 +54,7 @@ public class PermissionService {
         
     }
 
-    public void checkUser(User user){
+    private void checkUser(User user){
         if (user == null) {
             throw new IllegalArgumentException(" This task : the user is not recognized.");
         }
@@ -52,11 +62,11 @@ public class PermissionService {
             throw new PermissionDeniedException( "The user is not associated with a company.");
         }
         if (!userRepository.existsById(user.getMatricule())) {
-            throw new PermissionDeniedException(" The user does not exist in the system.");
+            throw new PermissionDeniedException(" The user with matricule " + user.getMatricule() +  " does not exist in the system.");
         } 
     } 
 
-    public void checkTask(Task task){
+    private void checkTask(Task task){
         if (task == null) {
             throw new PermissionDeniedException("The task is not recognized.");
         }
@@ -64,7 +74,7 @@ public class PermissionService {
             throw new PermissionDeniedException("The task is archived.");
         }
         if (!taskRepository.existsById(task.getId())) {
-            throw new PermissionDeniedException("The task does not exist in the system.");
+            throw new PermissionDeniedException("The task with ID " + task.getId() + " does not exist in the system.");
         } 
     } 
 

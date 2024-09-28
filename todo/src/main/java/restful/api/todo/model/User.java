@@ -23,6 +23,8 @@ public class User {
     @NotBlank private String firstName;
     @Getter
     @NotBlank private String lastName;
+    private String email;
+
 
     @ManyToOne
     @JoinColumn(name = "company_id") // Foreign key: multiple users can be assigned to one company
@@ -32,10 +34,11 @@ public class User {
     @Enumerated(EnumType.STRING) // store as a string
     private UserCategory category = UserCategory.STANDARD;
 
-    public User(String matricule, String firstName, String lastName, Company company, UserCategory category) {
+    public User(String matricule, String firstName, String lastName, String email, Company company, UserCategory category) {
         this.matricule = matricule;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.company = company;
         this.category = category != null ? category : UserCategory.STANDARD;
     }
